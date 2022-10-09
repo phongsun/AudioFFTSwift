@@ -39,6 +39,7 @@ class AudioModel {
                                      andBufferSize: 10)
     var rightAverageCircularBuffer = CircularBuffer.init(numChannels: 1,
                                          andBufferSize: 10)
+    var updatePeaksUI : ((Float, Float) -> Void)?
     
     // MARK: Public Methods
     
@@ -111,9 +112,9 @@ class AudioModel {
     @objc
     private func analyzeAudio() {
         // extra credit
-        let serialQueue = DispatchQueue(label: "audio.analysis.queue")
+        
         let fft2analyze = fftData.map { $0 } // make a copy of fftData and then analyze it
-        serialQueue.async {
+        
             // compute the frequency of the two loundest tones in the fft buffer
             // ** the peakInterpolation block function **
             // this function is from the slides
@@ -158,10 +159,15 @@ class AudioModel {
                 self.peakF1 = peak1*2
                 self.peakF2 = peak2*2
                 // TO-DO: Get them to display onto the ViewController
+                if let updateFunc = self.updatePeaksUI {
+                    DispatchQueue.main.async {
+                        updateFunc(self.peakF1, self.peakF2)
+                    }
+                }
             }
         }
         
-    }
+    
 
 
     @objc
@@ -207,15 +213,17 @@ class AudioModel {
     @objc
     private func runEveryInterval(){
         if inputBuffer != nil {
+            //let serialQueue = DispatchQueue(label: "audio.analysis.queue", qos: .background)
+            DispatchQueue.global().async {
             // copy time data to swift array
-            self.inputBuffer!.fetchFreshData(&timeData,
-                                             withNumSamples: Int64(BUFFER_SIZE))
+                self.inputBuffer!.fetchFreshData(&self.timeData,
+                                                 withNumSamples: Int64(self.BUFFER_SIZE))
             
             // now take FFT
-            fftHelper!.performForwardFFT(withData: &timeData,
-                                         andCopydBMagnitudeToBuffer: &fftData)
+                self.fftHelper!.performForwardFFT(withData: &self.timeData,
+                                                  andCopydBMagnitudeToBuffer: &self.fftData)
             
-            switch module {
+                switch self.module {
             case Module.B: self.detectDoppler()
                 break
             case Module.A: self.analyzeAudio()
@@ -225,4 +233,5 @@ class AudioModel {
         }
     }
     
+}
 }

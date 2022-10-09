@@ -81,14 +81,61 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CIv-FO-zey">
+                                <rect key="frame" x="0.0" y="327" width="414" height="62"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="414" id="7bX-jB-uju"/>
+                                    <constraint firstAttribute="height" constant="62" id="XFM-Ao-aga"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bs5-XY-glA">
+                                <rect key="frame" x="152" y="422" width="111" height="53"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Detect"/>
+                                <connections>
+                                    <action selector="detectButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mOK-dZ-ysy"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j6S-zp-cl7">
+                                <rect key="frame" x="0.0" y="257" width="414" height="62"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="62" id="Vft-sM-sRy"/>
+                                    <constraint firstAttribute="width" constant="414" id="t2T-Ru-6HR"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Bs5-XY-glA" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="152" id="1ng-UW-oVH"/>
+                            <constraint firstItem="Bs5-XY-glA" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="69p-72-kqP"/>
+                            <constraint firstItem="j6S-zp-cl7" firstAttribute="centerX" secondItem="Bs5-XY-glA" secondAttribute="centerX" id="DkT-Ef-TMh"/>
+                            <constraint firstItem="j6S-zp-cl7" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="165" id="WPW-mJ-ITH"/>
+                            <constraint firstItem="j6S-zp-cl7" firstAttribute="leading" secondItem="CIv-FO-zey" secondAttribute="leading" id="kNc-U7-6HC"/>
+                            <constraint firstItem="CIv-FO-zey" firstAttribute="top" secondItem="j6S-zp-cl7" secondAttribute="bottom" constant="8" symbolic="YES" id="ptk-nh-DGF"/>
+                            <constraint firstItem="Bs5-XY-glA" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="wqj-Ga-n2I"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Bs5-XY-glA" secondAttribute="bottom" constant="387" id="xlj-Db-Tpw"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="17Q-B4-hO2"/>
+                    <connections>
+                        <outlet property="detectButton" destination="Bs5-XY-glA" id="n5a-QX-vLq"/>
+                        <outlet property="peak1Label" destination="CIv-FO-zey" id="qkC-d3-M1v"/>
+                        <outlet property="peak2Label" destination="j6S-zp-cl7" id="PjS-DJ-Uyc"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2557" y="410"/>
+            <point key="canvasLocation" x="2556.521739130435" y="409.82142857142856"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="1di-1k-5PX">

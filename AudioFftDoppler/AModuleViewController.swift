@@ -17,9 +17,12 @@ import Metal
 
 
 class AModuleViewController: UIViewController {
+    @IBOutlet weak var peak2Label: UILabel!
+    @IBOutlet weak var peak1Label: UILabel!
     var myTimer:Timer?
     // setup audio model
     let audio = AudioModel.shared
+    var enabled4DisplayPeaks = true
     lazy var graph:MetalGraph? = {
         return MetalGraph(userView: self.view)
     }()
@@ -32,51 +35,44 @@ class AModuleViewController: UIViewController {
         }
     }
     
+    @IBOutlet weak var detectButton: UIButton!
+    @IBAction func detectButtonClicked(_ sender: UIButton) {
+        print("button clicked")
+        if detectButton.titleLabel?.text == "Detect" {
+            audio.updatePeaksUI = self.updatePeaks(peak1:peak2:)
+            detectButton.setTitle("Stop", for: .normal)
+        } else {
+            // current label is stop
+            audio.updatePeaksUI = nil
+            detectButton.setTitle("Detect", for: .normal)
+        }
+    }
+    
+    func updatePeaks(peak1: Float, peak2: Float) {
+        if self.enabled4DisplayPeaks == true {
+            self.enabled4DisplayPeaks = false
+            UIView.transition(with: self.peak1Label,
+                              duration: 2,
+                                          options: .transitionCrossDissolve,
+                                          animations: { [weak self] in
+                self?.peak1Label.text = "\(peak1) Hz"
+                        }, completion: nil)
+            UIView.transition(with: self.peak2Label,
+                                          duration: 2,
+                                          options: .transitionCrossDissolve,
+                                          animations: { [weak self] in
+                self?.peak2Label.text = "\(peak2) Hz"
+            }, completion: {_ in self.enabled4DisplayPeaks = true})
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // start up the audio model here, querying microphone
         audio.startMicrophoneProcessing(withSamplingSeconds: 0.25, module: Module.A)
-        
-        if let graph = self.graph{
-            graph.setBackgroundColor(r: 0, g: 0, b: 0, a: 1)
-            // add in graphs for display
-            graph.addGraph(withName: "fft",
-                            shouldNormalizeForFFT: true,
-                            numPointsInGraph:audio.BUFFER_SIZE/2)
-            
-            graph.addGraph(withName: "time",
-                numPointsInGraph: audio.BUFFER_SIZE)
-            
-            graph.makeGrids() // add grids to graph
-        }
-
 
         audio.play()
-        
-        // run the loop for updating the graph peridocially
-        self.myTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self,
-            selector: #selector(self.updateGraph),
-            userInfo: nil,
-            repeats: true)
-        
-       
     }
-    
-    // periodically, update the graph with refreshed FFT Data
-    @objc
-    func updateGraph(){
-        self.graph?.updateGraph(
-            data: self.audio.fftData,
-            forKey: "fft"
-        )
-        
-        self.graph?.updateGraph(
-            data: self.audio.timeData,
-            forKey: "time"
-        )
-    }
-    
     
 
 }
