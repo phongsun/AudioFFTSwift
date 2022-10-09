@@ -17,12 +17,17 @@ import Metal
 
 
 class BModuleViewController: UIViewController {
+    @IBOutlet weak var motionLabel: UILabel!
     var myTimer:Timer?
     // setup audio model
     let audio = AudioModel.shared
     lazy var graph:MetalGraph? = {
         return MetalGraph(userView: self.view)
     }()
+    
+    func updateMotionLabel(motion: Action){
+        motionLabel.text = "\(motion)"
+    }
     
     override func willMove(toParent parent: UIViewController?) {
         super.willMove(toParent: parent)
@@ -60,7 +65,7 @@ class BModuleViewController: UIViewController {
             userInfo: nil,
             repeats: true)
         
-       
+        audio.updateMotionUI = self.updateMotionLabel(motion:)
     }
     
     // periodically, update the graph with refreshed FFT Data

@@ -162,14 +162,30 @@
                     <view key="view" contentMode="scaleToFill" id="GSK-Om-V12">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="odA-4H-C9J">
+                                <rect key="frame" x="45" y="399" width="324" height="70"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="58"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="AHw-6G-okf"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="odA-4H-C9J" firstAttribute="centerX" secondItem="GSK-Om-V12" secondAttribute="centerX" id="VLG-u1-eUN"/>
+                            <constraint firstItem="odA-4H-C9J" firstAttribute="leading" secondItem="AHw-6G-okf" secondAttribute="leading" constant="45" id="Yrz-iS-6hx"/>
+                            <constraint firstItem="odA-4H-C9J" firstAttribute="top" secondItem="AHw-6G-okf" secondAttribute="top" constant="307" id="yVc-Or-xUA"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="JJ1-sO-YKL"/>
+                    <connections>
+                        <outlet property="motionLabel" destination="odA-4H-C9J" id="3ku-m6-CM2"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yn4-fg-UvH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2406" y="-56"/>
+            <point key="canvasLocation" x="2405.7971014492755" y="-56.25"/>
         </scene>
     </scenes>
     <resources>

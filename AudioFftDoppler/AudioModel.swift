@@ -17,6 +17,10 @@ enum Module {
     case A, B
 }
 
+enum Action {
+    case PULL, PUSH, STILL
+}
+
 class AudioModel {
     static let shared = AudioModel()
     private var module = Module.A
@@ -40,6 +44,7 @@ class AudioModel {
     var rightAverageCircularBuffer = CircularBuffer.init(numChannels: 1,
                                          andBufferSize: 10)
     var updatePeaksUI : ((Float, Float) -> Void)?
+    var updateMotionUI : ((Action) -> Void)?
     
     // MARK: Public Methods
     
@@ -57,7 +62,7 @@ class AudioModel {
             fftData = Array.init(repeating: 0.0, count: BUFFER_SIZE/2)
             //rightAvgData and leftAvgData are used to calculate doppler effects
             rightAvgData = Array.init(repeating: 0.0, count: 10)
-            leftAvgData = Array.init(repeating: 0.0, count: 10)
+            leftAvgData = Array.init(repeating: 0.0, count: 5)
             manager.inputBlock = self.handleMicrophone
             
             // repeat this fps times per second using the timer class
@@ -180,8 +185,9 @@ class AudioModel {
         // 3. average magnitude on window of both sides put in global variable
         let windowSize:Int = 8
         var rAvg:Float = Array(self.fftData[(Int(theF.0) + 1)...(Int(theF.0) + windowSize)]).reduce(0.0, +)/Float(windowSize)
-        var lAvg = Array(self.fftData[(Int(theF.0) - windowSize)...(Int(theF.0) - 1)]).reduce(0.0, +)/Float(windowSize)
+        var lAvg = Array(self.fftData[(Int(theF.0) - windowSize/2)...(Int(theF.0) - 1)]).reduce(0.0, +)/Float(windowSize/2)
         
+        \
         self.rightAverageCircularBuffer!.addNewFloatData(&rAvg, withNumSamples: 1)
         self.leftAverageCircularBuffer!.addNewFloatData(&lAvg, withNumSamples: 1)
         
@@ -190,21 +196,30 @@ class AudioModel {
                                          withNumSamples: 10)
 
         self.leftAverageCircularBuffer!.fetchFreshData(&leftAvgData,
-                                         withNumSamples: 10)
+                                         withNumSamples: 5)
 
         // 5. if right becomes bigger, hand moves in
         let rightAvgAvg = self.rightAvgData.reduce(0.0, +)/Float(10)
-        let leftAvgAvg = self.rightAvgData.reduce(0.0, +)/Float(10)
+        let leftAvgAvg = self.rightAvgData.reduce(0.0, +)/Float(5)
         
         print("left Avg Avg = \(leftAvgAvg) === \(lAvg)")
         print("right Avg Avg = \(rightAvgAvg) === \(rAvg)")
         // 6. if left becomes bigger, hand moves away
+        let detectMotion: Action
         if (rAvg - rightAvgAvg) > 1 {
-            print("strike")
+            print("push")
+            detectMotion = Action.PUSH
         } else if (lAvg - leftAvgAvg) > 1 {
-            print("withdraw")
+            print("pull")
+            detectMotion = Action.PULL
         } else {
             print("still")
+            detectMotion = Action.STILL
+        }
+        DispatchQueue.main.sync {
+            if let newMotion = self.updateMotionUI {
+                newMotion(detectMotion)
+            }
         }
         
     }
